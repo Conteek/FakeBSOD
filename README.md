@@ -27,7 +27,7 @@ Each screen is **visually accurate**, mimicking fonts, layouts, colors, QR codes
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Usage
 
 Go to [Releases](https://github.com/Conteek/FakeBSOD/releases)
 
