@@ -1,0 +1,20 @@
+﻿  BSODWin10.cpp
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(225,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(226,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(227,75): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(229,23): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(230,23): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(235,68): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(237,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(238,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(240,84): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(244,25): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(245,25): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(269,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(273,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin10\BSODWin10\BSODWin10.cpp(277,31): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  Создание кода
+  Previous IPDB not found, fall back to full compilation.
+  All 152 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  BSODWin10.vcxproj -> C:\Users\vanya\source\repos\BSODWin10\x64\Release\BSODWin10.exe
