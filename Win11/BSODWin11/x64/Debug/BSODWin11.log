@@ -1,0 +1,7 @@
+﻿  BSODWin11.cpp
+C:\Users\vanya\source\repos\BSODWin11\BSODWin11\BSODWin11.cpp(222,19): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin11\BSODWin11\BSODWin11.cpp(224,23): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin11\BSODWin11\BSODWin11.cpp(229,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin11\BSODWin11\BSODWin11.cpp(231,84): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin11\BSODWin11\BSODWin11.cpp(233,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  BSODWin11.vcxproj -> C:\Users\vanya\source\repos\BSODWin11\x64\Debug\BSODWin11.exe

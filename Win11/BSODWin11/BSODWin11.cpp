@@ -1,7 +1,6 @@
 ﻿#include <windows.h>
 #include <thread>
 #include <string>
-#include "resource.h" // Убедитесь, что этот файл существует и содержит #define IDB_BITMAP1 134
 #include <random>
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
@@ -11,19 +10,17 @@
 // Window class name
 #define CLASS_NAME L"BSODWindow"
 
-// Resource ID for the bitmap
-#define IDB_BITMAP1 129 // Соответствует вашему определению, убедитесь, что совпадает с resource.h
-
 // Global variables
 HWND hwnd;
 int percent = 0;
-COLORREF bsodColor = RGB(0, 120, 215); // Matches the real BSOD blue (#0078D7)
+COLORREF bsodColor = RGB(0, 0, 0); // Matches the real BSOD blue (#0078D7)
 HHOOK keyboardHook = NULL;
 extern int percent;
+bool textAppeared = false;
 bool bottomBlockAppeared = false;
 
 
-float originalVolume = 1.0f; // Сохраняем начальный уровень громкости
+float originalVolume = 1.0f;
 IAudioEndpointVolume* pVolume = nullptr;
 
 void MuteSystemSound() {
@@ -73,7 +70,7 @@ void ProgressThread() {
     std::mt19937 gen(rd());
 
     int totalPercent = 0;
-    int slower = 1;
+    int slower = 2;
 
     while (totalPercent < 100) {
         int delayMs;
@@ -112,28 +109,37 @@ void ProgressThread() {
     }
     Sleep(3000);
 
-    bsodColor = RGB(0, 0, 0); 
-    percent = -1;             
+    bsodColor = RGB(0, 0, 0);
+    percent = -1;
 
     InvalidateRect(hwnd, NULL, TRUE);
 
-    Sleep(6000);
+    Sleep(3000);
 
     RestoreSystemSound();
     ExitProcess(0);
 }
 
-// Function to draw text (Segoe UI Light)
-void DrawLightTextLine(HDC hdc, LPCWSTR text, int x, int y, int fontSize, int weight = FW_LIGHT) {
+void DrawLightTextLineCentered(HDC hdc, LPCWSTR text, int centerX, int y, int fontSize, int weight = FW_LIGHT) {
     HFONT font = CreateFontW(fontSize, 0, 0, 0, weight, FALSE, FALSE, FALSE,
         ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI Light");
-    SelectObject(hdc, font);
+
+    HFONT oldFont = (HFONT)SelectObject(hdc, font);
+
+    SIZE textSize;
+    GetTextExtentPoint32W(hdc, text, lstrlenW(text), &textSize);
+
+    int x = centerX - textSize.cx / 2;
+
     TextOutW(hdc, x, y, text, lstrlenW(text));
+
+    SelectObject(hdc, oldFont);
     DeleteObject(font);
 }
 
-// Function to draw text (Segoe UI Semilight)
+
+// Function to draw text with specified font size and weight (Segoe UI Semilight)
 void DrawSemilightTextLine(HDC hdc, LPCWSTR text, int x, int y, int fontSize, int weight = FW_REGULAR) {
     HFONT font = CreateFontW(fontSize, 0, 0, 0, weight, FALSE, FALSE, FALSE,
         ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
@@ -190,16 +196,6 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 // Window procedure
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
-    case WM_CREATE: {
-        SetTimer(hwnd, 1, 400, NULL);
-        break;
-    }
-    case WM_TIMER: {
-        bottomBlockAppeared = true;
-        KillTimer(hwnd, 1);
-        InvalidateRect(hwnd, NULL, FALSE);
-        break;
-    }
     case WM_PAINT: {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
@@ -222,62 +218,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             int screenW = rc.right - rc.left;
             int screenH = rc.bottom - rc.top;
 
-            int emoticonX = screenW * 0.1;
-            int emoticonY = screenH * 0.11;
-            DrawSemilightTextLine(memDC, L":(", emoticonX, emoticonY, 112 * 2.4, FW_NORMAL);
+            int X = screenW * 0.5;
 
-            int textX = screenW * 0.1;
-            int textY = emoticonY + 150 * 1.85;
-            DrawSemilightTextLine(memDC, L"Your PC ran into a problem and needs to restart. We're", textX, textY, 28 * 2);
-            textY += 60;
-            DrawSemilightTextLine(memDC, L"just collecting some error info, and then we'll restart for", textX, textY, 28 * 2);
-            textY += 60;
-            DrawSemilightTextLine(memDC, L"you.", textX, textY, 28 * 2.2);
+            int textY = screenH * 0.4;
+            DrawLightTextLineCentered(memDC, L"Your PC ran into a problem and needs to restart", X, textY, 28 * 2);
 
-            int progressX = screenW * 0.1;
-            int progressY = textY + 60 * 1.67;
+            Sleep(50);
+
+            int progressY = textY + 60 * 1.7;
             std::wstring progressStr = std::to_wstring(percent) + L"% complete";
-            DrawLightTextLine(memDC, progressStr.c_str(), progressX, progressY, 24 * 2.4);
+            DrawLightTextLineCentered(memDC, progressStr.c_str(), X, progressY, 24 * 2.4);
 
-            if (bottomBlockAppeared == true)
-            {
-                int qrX = screenW * 0.1;
-                int qrY = screenH * 0.665;
-                HBITMAP hBitmap = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP1));
-                if (hBitmap) {
-                    HDC qrDC = CreateCompatibleDC(memDC);
-                    HBITMAP oldQrBmp = (HBITMAP)SelectObject(qrDC, hBitmap);
-                    BITMAP bmp;
-                    GetObject(hBitmap, sizeof(BITMAP), &bmp);
-                    int qrSize = min(bmp.bmWidth, 115);
-                    BitBlt(memDC, qrX, qrY, qrSize, qrSize, qrDC, 0, 0, SRCCOPY);
-                    SelectObject(qrDC, oldQrBmp);
-                    DeleteDC(qrDC);
-                    DeleteObject(hBitmap);
-                }
-                else {
-                    int qrSize = 115;
-                    HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
-                    RECT qrRect = { qrX, qrY, qrX + qrSize, qrY + qrSize };
-                    FillRect(memDC, &qrRect, whiteBrush);
-                    DeleteObject(whiteBrush);
-                    wchar_t errorMsg[256];
-                    wsprintf(errorMsg, L"Failed to load IDB_BITMAP1 (Error: %d). Check if qrcode.bmp is a valid 24-bit BMP.", GetLastError());
-                    OutputDebugString(errorMsg);
-                }
+            int stopCodeY = screenH * 0.9;
+            DrawLightTextLineCentered(memDC, L"Stop code: CRITICAL_PROCESS_DIED", X, stopCodeY, 25);
 
-                int siteX = screenW * 0.1 + 115 + 20;
-                int siteY = qrY - 5;
-                DrawLightTextLine(memDC, L"For more information about this issue and possible fixes, visit https://www.windows.com/stopcode", siteX, siteY, 30);
-
-                int infoX = screenW * 0.1 + 115 + 20;
-                int infoY = siteY + 60;
-                DrawLightTextLine(memDC, L"If you call a support person, give them this info:", infoX, infoY, 23);
-
-                int stopCodeX = screenW * 0.1 + 115 + 20;
-                int stopCodeY = infoY + 35;
-                DrawLightTextLine(memDC, L"Stop code: CRITICAL_PROCESS_DIED", stopCodeX, stopCodeY, 25);
-            }
+            int whatFailedY = stopCodeY + 35;
+            DrawLightTextLineCentered(memDC, L"What failed:", X, whatFailedY, 25);
         }
 
         BitBlt(hdc, 0, 0, rc.right, rc.bottom, memDC, 0, 0, SRCCOPY);
@@ -324,11 +280,11 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR, int) {
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
 
-    //keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, hInstance, 0);
-    //if (!keyboardHook) {
-    //    MessageBox(NULL, L"Failed to install keyboard hook!", L"Error", MB_OK | MB_ICONERROR);
-    //    return 1;
-    //}
+    keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, hInstance, 0);
+    if (!keyboardHook) {
+        MessageBox(NULL, L"Failed to install keyboard hook!", L"Error", MB_OK | MB_ICONERROR);
+        return 1;
+    }
 
     std::thread t(ProgressThread);
     t.detach();
