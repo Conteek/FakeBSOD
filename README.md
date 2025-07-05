@@ -21,6 +21,7 @@ Each screen is **visually accurate**, mimicking fonts, layouts, colors, QR codes
 - Fake system crash with progress bar (e.g., "67% complete")
 - Fullscreen blocking mode
 - Blocking most keys and their combinations
+- Hide cursor
 - Stop code: CRITICAL_PROCESS_DIED
 
 ---
