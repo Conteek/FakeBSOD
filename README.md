@@ -7,9 +7,10 @@
 ## 🖥️ Overview
 
 This project simulates the **BSOD (Blue Screen of Death)** as seen in different versions of Microsoft Windows, including:
-
+ 
+- Windows 7  
 - Windows 10  
-- Windows 11  
+- Windows 11 
 
 Each screen is **visually accurate**, mimicking fonts, layouts, colors, QR codes, error messages, and even fake progress bars.
 
