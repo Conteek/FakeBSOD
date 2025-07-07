@@ -22,11 +22,12 @@ Each screen is **visually accurate**, mimicking fonts, layouts, colors, QR codes
 - Fullscreen blocking mode
 - Blocking most keys and their combinations
 - Hide cursor
+- Disabling system sounds
 - Stop code: CRITICAL_PROCESS_DIED
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Usage
 
 Go to [Releases](https://github.com/Conteek/FakeBSOD/releases)
 
