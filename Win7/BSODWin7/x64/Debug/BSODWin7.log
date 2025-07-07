@@ -1,0 +1,4 @@
+﻿  BSODWin7.cpp
+C:\Users\vanya\source\repos\BSODWin7\BSODWin7\BSODWin7.cpp(273,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\vanya\source\repos\BSODWin7\BSODWin7\BSODWin7.cpp(274,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  BSODWin7.vcxproj -> C:\Users\vanya\source\repos\BSODWin7\x64\Debug\BSODWin7.exe
